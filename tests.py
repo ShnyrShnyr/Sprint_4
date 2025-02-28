@@ -25,7 +25,7 @@ class TestBooksCollector:
     # Тест 1. Проверить, что у добавленной книги жанр пустая строка
 
     def test_add_new_book_books_genre_is_empty(self, add_book):
-        assert add_book.get('Роза и червь') == ''
+        assert add_book.books_genre.get('Роза и червь') == ''
 
     # Тест 2. Проверить, что жанр добавился к книге
     def test_set_book_genre_was_appeared(self, set_book_and_genre):
@@ -37,15 +37,18 @@ class TestBooksCollector:
 
     # Tecт 4. Проверить, что выводится список книг по жанру Фантастика
     def test_get_books_with_specific_genre_fantastic(self, dict_books):
-        assert 'Хоббит' and 'Властелин Колец' and 'Роза и червь' in dict_books.get_books_with_specific_genre('Фантастика')
+        fantastic_book = ['Хоббит', 'Властелин Колец', 'Роза и червь']
+        assert fantastic_book == dict_books.get_books_with_specific_genre('Фантастика')
 
     # Тест 5. Проверить, что в запросе всей коллекции есть фильмы Один дома, Челюсти, Декстер
-    def test_get_books_genre_some_books_in_dict(self, dict_books):
-        assert 'Один дома' and 'Челюсти' and 'Декстер' in dict_books.get_books_genre()
+    @pytest.mark.parametrize('books', ['Один дома', 'Челюсти', 'Декстер'])
+    def test_get_books_genre_some_books_in_dict(self, dict_books, books):
+        assert books in dict_books.get_books_genre()
 
     # Тест 6. Проверить, что книги жанра Ужасы и Детективы не в списке книг для детей
-    def test_get_books_for_children_without_horrors_detective(self, dict_books):
-        assert 'Декстер' and 'Челюсти' not in dict_books.get_books_for_children()
+    @pytest.mark.parametrize('books', ['Декстер', 'Челюсти'])
+    def test_get_books_for_children_without_horrors_detective(self, dict_books, books):
+        assert  books not in dict_books.get_books_for_children()
 
     # Тест 7. Проверить, что книга добавилась в избранное
     def test_add_book_in_favorites_done(self, dict_books):
@@ -62,4 +65,4 @@ class TestBooksCollector:
     @pytest.mark.parametrize('favor_book',['Роза и червь','Декстер','Один дома'])
     def test_get_list_of_favorites_books_each_book_in_favor(self, dict_books, favor_book):
         dict_books.add_book_in_favorites(favor_book)
-        assert favor_book in dict_books.favorites
+        assert favor_book in dict_books.get_list_of_favorites_books()
