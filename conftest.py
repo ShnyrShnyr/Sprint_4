@@ -8,9 +8,11 @@ def add_book():
     return collection
 
 @pytest.fixture
-def set_book_and_genre(add_book):
-    add_book.set_book_genre('Роза и червь', 'Фантастика')
-    return add_book.books_genre
+def set_book_and_genre():
+    collection = BooksCollector()
+    collection.add_new_book('Роза и червь')
+    collection.set_book_genre('Роза и червь', 'Фантастика')
+    return collection
 
 @pytest.fixture
 def dict_books():
